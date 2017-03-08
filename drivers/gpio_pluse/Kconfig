@@ -1,0 +1,14 @@
+#
+# Character device configuration
+#
+
+menu "gpio_pluse ir support"
+
+
+config GPIO_PLUSE
+
+tristate "gpio_pluse ir support"
+default y
+help
+	gpio serial
+endmenu

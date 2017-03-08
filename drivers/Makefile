@@ -10,6 +10,7 @@ obj-y				+= pinctrl/
 obj-y				+= gpio/
 obj-$(CONFIG_GENERIC_PWM)	+= pwm/
 obj-$(CONFIG_PCI)		+= pci/
+obj-$(CONFIG_GPIO_PLUSE)		+= gpio_pluse/
 obj-$(CONFIG_PARISC)		+= parisc/
 obj-$(CONFIG_RAPIDIO)		+= rapidio/
 obj-y				+= video/

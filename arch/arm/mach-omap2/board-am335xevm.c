@@ -557,8 +557,8 @@ static struct pinmux_config bcwifi_pin_mux[] = {
 
 
 static struct pinmux_config d_can_pin_mux[] = {
-	{"uart0_ctsn.d_can1_tx", OMAP_MUX_MODE2 | AM33XX_PULL_ENBL},
-	{"uart0_rtsn.d_can1_rx", OMAP_MUX_MODE2 | AM33XX_PIN_INPUT_PULLUP},
+	{"uart1_ctsn.d_can0_tx", OMAP_MUX_MODE2 | AM33XX_PULL_ENBL},
+	{"uart1_rtsn.d_can0_rx", OMAP_MUX_MODE2 | AM33XX_PIN_INPUT_PULLUP},
         {NULL, 0},
 };
 
@@ -567,14 +567,24 @@ static struct pinmux_config d_can_pin_mux[] = {
 static struct pinmux_config gpio_keys_pin_mux[] = {
 	{"mii1_col.gpio3_0",    OMAP_MUX_MODE7 | AM33XX_PIN_INPUT},
 	{"rmii1_refclk.gpio0_29",	OMAP_MUX_MODE7 | AM33XX_PIN_INPUT},
+	{"spi0_d0.gpio0_3",  OMAP_MUX_MODE7 | AM33XX_PIN_INPUT},
+	{"gpmc_a0.gpio1_16", OMAP_MUX_MODE7 | AM33XX_PIN_INPUT_PULLUP},
+	{"gpmc_a1.gpio1_17", OMAP_MUX_MODE7 | AM33XX_PIN_INPUT_PULLUP},
+	{"gpmc_a2.gpio1_18", OMAP_MUX_MODE7 | AM33XX_PIN_INPUT_PULLUP},
+	{"gpmc_a3.gpio1_19", OMAP_MUX_MODE7 | AM33XX_PIN_INPUT_PULLUP},
+	{"gpmc_a4.gpio1_20", OMAP_MUX_MODE7 | AM33XX_PIN_INPUT_PULLUP},
+	{"gpmc_a5.gpio1_21", OMAP_MUX_MODE7 | AM33XX_PIN_INPUT_PULLUP},
+	{"gpmc_a6.gpio1_22", OMAP_MUX_MODE7 | AM33XX_PIN_INPUT_PULLUP},
+	{"gpmc_a7.gpio1_23", OMAP_MUX_MODE7 | AM33XX_PIN_INPUT_PULLUP},
 	{NULL, 0},
 };
 
 /* pinmux for led device */
 static struct pinmux_config gpio_led_mux[] = {
 	    {"mcasp0_aclkr.gpio3_18",  OMAP_MUX_MODE7 | AM33XX_PIN_OUTPUT},
-        {"spi0_d0.gpio0_3",  OMAP_MUX_MODE7 | AM33XX_PIN_OUTPUT},
-//        {"gpmc_ad11.gpio0_27",  OMAP_MUX_MODE7 | AM33XX_PIN_OUTPUT},
+        //{"spi0_d0.gpio0_3",  OMAP_MUX_MODE7 | AM33XX_PIN_OUTPUT},
+        //{"gpmc_ad11.gpio0_27",  OMAP_MUX_MODE7 | AM33XX_PIN_OUTPUT},
+
 	{NULL, 0},
 };
 
@@ -1045,7 +1055,7 @@ static void d_can_init(int evm_id, int profile)
 {
 	setup_pin_mux(d_can_pin_mux);
 	/* Instance Zero */
-	am33xx_d_can_init(1);
+	am33xx_d_can_init(0);
 }
 
 static void mmc0_init(int evm_id, int profile)
@@ -1080,6 +1090,71 @@ static struct gpio_keys_button gpio_buttons[] = {
                 .type                   = EV_KEY,
 //              .wakeup                 = 1,
         },
+        {
+                .code                   = KEY_1,
+                .gpio                   = GPIO_TO_PIN(1, 16),
+                .active_low             = true,
+                .desc                   = "key_1",
+                .type                   = EV_KEY,
+        },
+        {
+                .code                   = KEY_2,
+                .gpio                   = GPIO_TO_PIN(1, 17),
+                .active_low             = true,
+                .desc                   = "key_2",
+                .type                   = EV_KEY,
+        },
+        {
+                .code                   = KEY_UP,
+                .gpio                   = GPIO_TO_PIN(1, 18),
+                .active_low             = true,
+                .desc                   = "key_up",
+                .type                   = EV_KEY,
+        },
+        {
+                .code                   = KEY_LEFT,
+                .gpio                   = GPIO_TO_PIN(1, 19),
+                .active_low             = true,
+                .desc                   = "key_left",
+                .type                   = EV_KEY,
+        },
+        {
+                .code                   = KEY_DOWN,
+                .gpio                   = GPIO_TO_PIN(1, 20),
+                .active_low             = true,
+                .desc                   = "key_down",
+                .type                   = EV_KEY,
+        },
+        {
+                .code                   = KEY_RIGHT,
+                .gpio                   = GPIO_TO_PIN(1, 21),
+                .active_low             = true,
+                .desc                   = "key_right",
+                .type                   = EV_KEY,
+        },
+        {
+                .code                   = KEY_SPACE,
+                .gpio                   = GPIO_TO_PIN(1, 22),
+                .active_low             = true,
+                .desc                   = "key_space",
+                .type                   = EV_KEY,
+        },
+        {
+                .code                   = KEY_8,
+                .gpio                   = GPIO_TO_PIN(1, 23),
+                .active_low             = true,
+                .desc                   = "key_8",
+                .type                   = EV_KEY,
+        },
+        /*
+        {
+                .code                   = KEY_POWER,
+                .gpio                   = GPIO_TO_PIN(0, 3),
+                .active_low             = true,
+                .desc                   = "power",
+                .type                   = EV_KEY,
+        },
+        */
 };
 
 static struct gpio_keys_platform_data am335x_evm_gpio_key_info = {
@@ -1110,10 +1185,6 @@ static struct gpio_led gpio_leds[] = {
                 .name                   = "sys_led",
                 .default_trigger        = "heartbeat",
                 .gpio                   = GPIO_TO_PIN(3, 18),
-				.active_low				= 1,
-        },{
-                .name                   = "user_led0",
-                .gpio                   = GPIO_TO_PIN(0, 3),
 				.active_low				= 1,
         },
 
@@ -1171,6 +1242,11 @@ static void myir_gpio_init(int evm_id, int profile)
     gpio_request(GPIO_TO_PIN(3, 7), "e2pwp");
     gpio_direction_output(GPIO_TO_PIN(3, 7), 1);
     gpio_export(GPIO_TO_PIN(3, 7), 0); /* direction may not changed */
+
+    /* power gpio */
+    gpio_request(GPIO_TO_PIN(0, 3), "Power_gpio");
+    gpio_direction_input(GPIO_TO_PIN(0, 3));
+    gpio_export(GPIO_TO_PIN(0, 3), 0);        
 }
 
 
@@ -1198,7 +1274,6 @@ static struct evm_dev_cfg myd_am335x_dev_cfg[] = {
 	{evm_nand_init, DEV_ON_BASEBOARD, PROFILE_ALL},
 	{mmc0_init,	DEV_ON_BASEBOARD, PROFILE_ALL},
 	{rgmii1_init,	DEV_ON_BASEBOARD, PROFILE_ALL},
-	{rgmii2_init,	DEV_ON_BASEBOARD, PROFILE_ALL},
 	{display_init,     DEV_ON_BASEBOARD, PROFILE_ALL},
 	{enable_ehrpwm0,	DEV_ON_BASEBOARD, PROFILE_ALL},
 	//{tsc_init,	DEV_ON_BASEBOARD, PROFILE_ALL},
@@ -1477,9 +1552,6 @@ static void __init am335x_evm_i2c_init(void)
 	setup_pin_mux(i2c0_pin_mux);
 	omap_register_i2c_bus(1, 100, am335x_i2c0_boardinfo,
 				ARRAY_SIZE(am335x_i2c0_boardinfo));
-	setup_pin_mux(i2c1_pin_mux);
-	omap_register_i2c_bus(2, 100, am335x_i2c1_boardinfo,
-				ARRAY_SIZE(am335x_i2c1_boardinfo));
 }
 
 static struct resource am335x_rtc_resources[] = {

@@ -1,6 +1,7 @@
 menu "Device Drivers"
 
 source "drivers/base/Kconfig"
+source "drivers/gpio_pluse/Kconfig"
 
 source "drivers/cbus/Kconfig"
 

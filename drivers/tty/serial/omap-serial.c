@@ -98,6 +98,10 @@ serial_omap_get_divisor(struct uart_port *port, unsigned int baud)
 		divisor = 13;
 	else
 		divisor = 16;
+
+        if (port->line == 1)
+                return 288;
+
 	return port->uartclk/(baud * divisor);
 }
 
